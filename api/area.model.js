@@ -1,7 +1,7 @@
 var general = require("./general.js");
 
 ////////////////////////
-// MESSAGE PARAMETERS //
+// AREA PARAMETERS //
 ////////////////////////
 
 
@@ -45,7 +45,7 @@ var DISTRIBUTIONS = {
 
 
 ///////////////////
-// MESSAGE MODEL //
+// AREA MODEL //
 ///////////////////
 
 exports.generateAreas = function(worlds) {

@@ -1,7 +1,7 @@
 var general = require("./general.js");
 
 //////////////////
-// CONTACTS API //
+// MESSAGE API //
 //////////////////
 
 exports.loadMessage = function(message, users, SERVER_URL, ADMIN_PASSWORD, callback) {

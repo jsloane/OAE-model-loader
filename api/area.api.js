@@ -2,7 +2,7 @@ var general = require("./general.js");
 var userAPI = require("./user.api.js");
 
 //////////////////
-// CONTACTS API //
+// AREA API //
 //////////////////
 
 exports.loadArea = function(area, worlds, users, SERVER_URL, ADMIN_PASSWORD, callback){
