@@ -8,20 +8,17 @@ var DISTRIBUTIONS = {
     "student": {
         "HAS_CONTACTS": [[0.8, true],[0.2, false]],
         "TOTAL": [15, 10, 1, 700],
-        "ACCEPT_REQUEST": [[0.95, true],[0.05, false]],
-        "SEND_MESSAGE": [[0.7, true],[0.3, false]]
+        "ACCEPT_REQUEST": [[0.95, true],[0.05, false]]
     },
     "lecturer": {
         "HAS_CONTACTS": [[0.6, true],[0.4, false]],
         "TOTAL": [5, 3, 1, 300],
-        "ACCEPT_REQUEST": [[0.95, true],[0.05, false]],
-        "SEND_MESSAGE": [[0.7, true],[0.3, false]]
+        "ACCEPT_REQUEST": [[0.95, true],[0.05, false]]
     },
     "researcher": {
         "HAS_CONTACTS": [[0.7, true],[0.3, false]],
         "TOTAL": [8, 2, 1, 800],
-        "ACCEPT_REQUEST": [[0.95, true],[0.05, false]],
-        "SEND_MESSAGE": [[0.7, true],[0.3, false]]
+        "ACCEPT_REQUEST": [[0.95, true],[0.05, false]]
     }
 };
 
@@ -89,7 +86,6 @@ exports.Contact = function(user1, user2){
     that.invitee = user2.userid;
     that.type = types[Math.floor(Math.random() * types.length)];
     that.willAccept = general.randomize(DISTRIBUTIONS[user2.userType].ACCEPT_REQUEST);
-    that.willMessage = general.randomize(DISTRIBUTIONS[user2.userType].SEND_MESSAGE);
 
     return that;
 };

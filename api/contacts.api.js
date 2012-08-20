@@ -20,15 +20,7 @@ exports.loadContact = function(contact, users, SERVER_URL, ADMIN_PASSWORD, callb
     sendContactRequest(contact, inviter, invitee, SERVER_URL, ADMIN_PASSWORD, function(){
         // Accept the request if appropriate
         if (contact.willAccept){
-            acceptContactRequest(contact, inviter, invitee, SERVER_URL, ADMIN_PASSWORD);
-            // Send a message if appropriate
-            if (contact.willMessage) {
-                sendMessage(contact, inviter, invitee, SERVER_URL, ADMIN_PASSWORD, callback);
-            } else {
-                callback();
-            }
-        } else if (contact.willMessage) {
-            sendMessage(contact, inviter, invitee, SERVER_URL, ADMIN_PASSWORD, callback);
+            acceptContactRequest(contact, inviter, invitee, SERVER_URL, ADMIN_PASSWORD, callback);
         } else {
             callback();
         }
@@ -97,26 +89,6 @@ var acceptContactRequest = function(contact, inviter, invitee, SERVER_URL, ADMIN
     general.urlReq(SERVER_URL + "/~" + invitee.userid + "/contacts.accept.html", {
         method: 'POST',
         params: contactRequest,
-        auth: auth
-    }, callback);
-};
-
-var sendMessage = function(contact, inviter, invitee, SERVER_URL, ADMIN_PASSWORD, callback){
-    var auth = invitee.userid + ":" + invitee.password;
-    var messageParams = {
-        "_charset_": "utf-8",
-        "sakai:body":  "Lets put another shrimp on the barbie!",
-        "sakai:category": "message",
-        "sakai:from": invitee.userid,
-        "sakai:messagebox": "outbox",
-        "sakai:sendstate": "pending",
-        "sakai:subject": "gday mate",
-        "sakai:to": "internal:" + inviter.userid,
-        "sakai:type":  "internal"
-    };
-    general.urlReq(SERVER_URL + "/~" + invitee.userid + "/message.create.html", {
-        method: 'POST',
-        params: messageParams,
         auth: auth
     }, callback);
 };
