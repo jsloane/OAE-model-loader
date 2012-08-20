@@ -2,6 +2,7 @@ var general = require("./api/general.js");
 var user = require("./api/user.model.js");
 var contacts = require("./api/contacts.model.js");
 var world = require("./api/world.model.js");
+var area = require("./api/area.model.js");
 var messages = require("./api/messages.model.js");
 
 //////////////////////////////////////
@@ -38,7 +39,7 @@ var run = function(){
         // Write sharing to file
         // TODO
         // Write areas to file
-        // TODO
+        general.writeFileIntoArray("./" + SCRIPT_FOLDER + "/areas/" + i + ".txt", batch.areas);
         // Write messages to file
         general.writeFileIntoArray("./" + SCRIPT_FOLDER + "/messages/" + i + ".txt", batch.messages);
         batches.push(batch);
@@ -62,6 +63,7 @@ var generateBatch = function(id){
         } catch (err2){w--;}
     }
     batch.worlds = world.setWorldMemberships(id, batch.worlds, batch.users);
+    batch.areas = area.generateAreas(batch.worlds);
     batch.messages = messages.generateMessages(batch.worlds, batch.users);
     console.log("Finished Generating Batch " + id);
     console.log("=================================");

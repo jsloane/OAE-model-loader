@@ -7,18 +7,24 @@ var general = require("./general.js");
 var DISTRIBUTIONS = {
     "student": {
         "WILL_MESSAGE": [[0.8, true],[0.2, false]],
-        "TOTAL": [15, 10, 1, 50],
-        "FOR_WORLD": [0, 0.15, 0.05, 0.1]
+        "TOTAL": [15, 2, 1, 50],
+        "FOR_WORLD": [[0.1, true],[0.9, false]],
+        "SUBJECT": [8, 2, 1, 20],
+        "BODY": [200, 100, 10, 1000]
     },
     "lecturer": {
         "WILL_MESSAGE": [[0.6, true],[0.4, false]],
-        "TOTAL": [15, 10, 1, 50],
-        "FOR_WORLD": [0.1, 0.5, 0.25, 0.6]
+        "TOTAL": [15, 2, 1, 50],
+        "FOR_WORLD": [[0.5, true],[0.5, false]],
+        "SUBJECT": [8, 2, 1, 20],
+        "BODY": [300, 200, 10, 2000]
     },
     "researcher": {
         "WILL_MESSAGE": [[0.3, true],[0.7, false]],
-        "TOTAL": [15, 10, 1, 50],
-        "FOR_WORLD": [0, 0.15, 0.05, 0.1]
+        "TOTAL": [5, 1, 0, 30],
+        "FOR_WORLD": [[0.3, true],[0.7, false]],
+        "SUBJECT": [8, 2, 1, 20],
+        "BODY": [300, 150, 10, 3000]
     }
 };
 
@@ -31,25 +37,24 @@ exports.generateMessages = function(worlds, users) {
     var messages = [];
 
     // Determine target number of messages for each user
-    for (var u = 0; u < users.length; u++){
-        var user = users[u];
-        user.willMessage = general.randomize(DISTRIBUTIONS[user.userType].WILL_MESSAGE);
-        user.targetMessages = general.ASM(DISTRIBUTIONS[user.userType].TOTAL);
-        user.forWorld = general.ASM(DISTRIBUTIONS[user.userType].FOR_WORLD);
-    }
+    for (var u = 0; u < users.length; u++) {
+        var muser = users[u];
+        var willMessage = general.randomize(DISTRIBUTIONS[muser.userType].WILL_MESSAGE);
+        var targetMessages = general.ASM(DISTRIBUTIONS[muser.userType].TOTAL);
+        var forWorld = general.randomize(DISTRIBUTIONS[muser.userType].FOR_WORLD);
 
-    for (var s = 0; s < users.length; s++){
-        var muser = users[s];
-        if (muser.willMessage) {
+        if (willMessage) {
             // Determine how many messages to send
-            var forUser = Math.round((1 - muser.forWorld) * muser.targetMessages);
-            var forWorld = Math.round(muser.forWorld * muser.targetMessages);
+            var forUser = Math.round((1 - forWorld) * targetMessages);
+            var forWorld = Math.round(forWorld * targetMessages);
 
             for (i = 0; i < forWorld; i++) {
+                // select a random world to message
                 var worldToMessage = worlds[Math.floor(Math.random() * worlds.length)];
                 messages.push(new exports.Message(muser, worldToMessage.id));
             }
             for (i = 0; i < forUser; i++) {
+                // select a random user to message
                 var userToMessage = users[Math.floor(Math.random() * users.length)];
                 messages.push(new exports.Message(muser, userToMessage.userid));
             }
@@ -59,13 +64,14 @@ exports.generateMessages = function(worlds, users) {
     return messages;
 };
 
-exports.Message = function(fromUser, toId){
+exports.Message = function(fromUser, toId) {
     var that = {};
 
     that.from = fromUser.userid;
     that.to = toId;
-    that.subject = "gday mate";
-    that.body = "Lets put another shrimp on the barbie!";
+    that.subject = general.generateKeywords(general.ASM(DISTRIBUTIONS[fromUser.userType].SUBJECT)).join(" ");
+    that.subject = that.subject[0].toUpperCase() + that.subject.substring(1);
+    that.body = general.generateSentence(general.ASM(DISTRIBUTIONS[fromUser.userType].BODY));
 
     return that;
 };
